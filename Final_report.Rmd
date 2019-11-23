@@ -1,0 +1,107 @@
+---
+title: "Práctica 1 - House Sales in King County (SA, USA)"
+author: "Felipe Ortega"
+date: "`r format(Sys.Date(), '%d de %B de %Y')`"
+output:
+  bookdown::html_document2:
+    includes:
+      in_header: "google-font.html"
+    css: styles.css
+    toc: true  # Incluye tabla de contenidos automática
+    toc_float: true  # Mantener ToC visible a la izquierda
+    toc_depth: 2  # Incluir dos niveles de profundidad en ToC
+    number_sections: true  # Autonumerado de secciones
+    theme: flatly  # Tema Bootstrap a emplear, 
+                  # se puede elegir entre las opciones por defecto de Bootstrap:
+                  # default, cerulean, journal, flatly, readable, spacelab, 
+                  # united, cosmo, lumen, paper, sandstone, simplex, and yeti
+    code_folding: show  # Oculta el código de R, incluye un botón para mostrarlo
+                        # u ocultarlo
+    df_print: paged  # Utiliza paged para mostrar mejor las tablas de datos
+    fig_width: 7  # Anchura por defecto de las graficas (en pulgadas)
+    fig_height: 5  # Altura por defecto de las gráficas (en pulgadas)
+    fig_caption: true  # Incluye pie de figura y tablas
+                       # El texto del caption se incluye en el argumento fig.cap
+                       # en cada chunk
+bibliography: references.bib  # Fichero de referencias bibliográficas
+                              # en formato BibTeX
+link-citations: yes  # Enlaces a entradas de bibliografía al final
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Introducción
+
+Para la primera práctica, vamos a proponer el análisis de un conjunto de datos
+sobre precios de viviendas en King County (SA, USA). Los datos provienen
+de Kaggle Datasets [enlace](https://www.kaggle.com/harlfoxem/housesalesprediction).
+
+Las variables dentro de este dataset son una combinación de datos cuantitativos
+y categóricos. Muchas de estas variables necesitarán ser transformadas, limpiadas
+y preparadas previamente antes de poder ser introducidas en un modelo.
+
+## Objetivo
+
+El **objetivo** de la práctica es construir un modelo de predicción para el
+**precio de la vivienda** (variable `price`), en función de tantas variables
+de entrada como estimemos conveniente.
+
+Los pasos que vamos a seguir son:
+
+  1. Separación de los datos en **training set** (70% de los datos) y
+  **testing set** (30% restante de los datos).
+  
+  2. EDA sobre los datos de entrenamiento. Identificación de posibles
+  operaciones que debemos realizar sobre los datos:
+    - Identificación de atípicos, datos faltantes (imputación, si es necesario).
+    - Aplicación de transformaciones necesarias en los datos de entrada y
+    la variable de salida (si es caso).
+    - Codificación de variables categóricas.
+    - Discretización de variables cuantitativas (si es caso, y está debidamente
+    justificado).
+    - Validación de los valores de las variables del modelo. Identificación de errores.
+    
+  3. Propuesta inicial de un modelo de predicción, basado en regresión
+  múltiple. Selección de variables.
+  
+  4. Evaluación del rendimiento del modelo, evaluación de los coeficientes mediante
+  validación cruzada, *bootstrap* y/o otros métodos.
+  
+  5. Aplicación de las mismas transformaciones de datos al conjunto de pruebas.
+  Evaluación de los resultados de predicción en el conjunto de pruebas.
+  
+# Limpieza y preparación de datos
+
+En esta fase vamos a comenzar por los pasos 1 y 2 de nuestro proceso, basándonos en todos
+los contenidos vistos hasta el momento en la asignatura.
+
+## División en datos de entrenamiento y datos de prueba
+
+Aunque podríamos hacer este proceso de forma manual, es mejor utilizar métodos automatizados
+más eficientes. El paquete `caret` [@caret2018] incluye múltiples funciones interesantes
+para agilizar todo el proceso de creación y evaluación de modelos predictivos.
+
+```{r training-testing, message=FALSE}
+library(readr)
+library(caret)
+library(dplyr)
+
+kc_house_data <- read_csv("data/kc_house_data.csv")
+inTraining <- createDataPartition(pull(kc_house_data, price),
+                                  p = .7, list = FALSE, times = 1)
+house_training <- slice(kc_house_data, inTraining)
+house_testing <- slice(kc_house_data, -inTraining)
+```
+
+A partir de aquí, realizar todas las operaciones necesarias para limpiar y preparar
+los datos como preludio al proceso de modelado.
+
+# Otras referencias
+
+- Introducción simple al paquete `caret`: https://cran.r-project.org/web/packages/caret/vignettes/caret.html.
+
+- Manual completo del paquete `caret`: http://topepo.github.io/caret/index.html.
+
+# Bibliografía
