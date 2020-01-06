@@ -1,6 +1,6 @@
 ---
-title: "Práctica 1 - House Sales in King County (SA, USA)"
-author: "Felipe Ortega"
+title: "ML applied to real estate"
+author: "Jose Buitrago"
 date: "`r format(Sys.Date(), '%d de %B de %Y')`"
 output:
   bookdown::html_document2:
@@ -44,7 +44,7 @@ y preparadas previamente antes de poder ser introducidas en un modelo.
 
 ## Objetivo
 
-El **objetivo** de la práctica es construir un modelo de predicción para el
+El **objetivo** del proyecto es construir un modelo de predicción para el
 **precio de la vivienda** (variable `price`), en función de tantas variables
 de entrada como estimemos conveniente.
 
